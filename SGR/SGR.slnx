@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SGR.Aplicacion/SGR.Aplicacion.csproj" />
+  <Project Path="SGR.Consola/SGR.Consola.csproj" />
+  <Project Path="SGR.Dominio/SGR.Dominio.csproj" />
+  <Project Path="SGR.Infraestructura/SGR.Infraestructura.csproj" />
+</Solution>
