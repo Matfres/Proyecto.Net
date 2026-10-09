@@ -45,5 +45,44 @@ public class Reclamo
         FechaUltimaModificacion = DateTime.Now;
         UsuarioUltimoCambio = idUsuario;
     }
+
+    public bool ActualizarEstado(TipoActuacion? ultimoTipo, Guid idUsuario)
+    {
+        EstadoReclamo? nuevoEstado;
+
+        if (ultimoTipo == null)
+        {
+            nuevoEstado = EstadoReclamo.Recibido;
+        }
+        else
+        {
+            nuevoEstado = ultimoTipo switch
+            {
+                TipoActuacion.Inspeccion => EstadoReclamo.EnInspeccion,
+                TipoActuacion.OrdenDeTrabajo => EstadoReclamo.EnEjecucion,
+                TipoActuacion.TrabajoRealizado => EstadoReclamo.Resuelto,
+                TipoActuacion.Archivo => EstadoReclamo.Cerrado,
+                TipoActuacion.Observacion => null,
+                TipoActuacion.RespuestaAlVecino => null,
+                _ => null
+            };
+        }
+
+        if (nuevoEstado == null)
+        {   
+            return false;
+        }
+        
+        if (Estado == nuevoEstado) // si estado previo es el mismo que actual que llega no impacta 
+        {
+            return false;
+        }
+
+        Estado = nuevoEstado.Value;
+        FechaUltimaModificacion = DateTime.Now;
+        UsuarioUltimoCambio = idUsuario;
+
+        return true;
+    }
     
 }
