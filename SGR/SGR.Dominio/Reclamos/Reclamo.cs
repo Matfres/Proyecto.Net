@@ -11,10 +11,7 @@ public class Reclamo
     public Guid UsuarioUltimoCambio { get; private set; }
     public EstadoReclamo Estado { get; private set; }
 
-    public Reclamo(
-        Asunto asunto,
-        DateTime fechaCreacion,
-        Guid idUsuario)
+    public Reclamo(Asunto asunto, DateTime fechaCreacion, Guid idUsuario)
     {
         if (asunto == null)
             throw new DominioException("El asunto es obligatorio.");
@@ -26,4 +23,16 @@ public class Reclamo
         UsuarioUltimoCambio = idUsuario;
         Estado = EstadoReclamo.Recibido;
     }
+
+    public void ModificarAsunto(Asunto nuevoAsunto, Guid idUsuario)
+{
+    if (nuevoAsunto == null)
+    {
+        throw new DominioException(
+            "El asunto es obligatorio.");
+    }
+    Asunto = nuevoAsunto;
+    FechaUltimaModificacion = DateTime.Now;
+    UsuarioUltimoCambio = idUsuario;
+}
 }
