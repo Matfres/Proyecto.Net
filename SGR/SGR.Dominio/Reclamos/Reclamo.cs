@@ -25,14 +25,25 @@ public class Reclamo
     }
 
     public void ModificarAsunto(Asunto nuevoAsunto, Guid idUsuario)
-{
-    if (nuevoAsunto == null)
     {
-        throw new DominioException(
-            "El asunto es obligatorio.");
+        if (nuevoAsunto == null)
+        {
+            throw new DominioException("El asunto es obligatorio.");
+        }
+        Asunto = nuevoAsunto;
+        FechaUltimaModificacion = DateTime.Now;
+        UsuarioUltimoCambio = idUsuario;
     }
-    Asunto = nuevoAsunto;
-    FechaUltimaModificacion = DateTime.Now;
-    UsuarioUltimoCambio = idUsuario;
-}
+
+    public void CambiarEstado(EstadoReclamo nuevoEstado, Guid idUsuario)
+    {
+        if (!Enum.IsDefined(typeof(EstadoReclamo), nuevoEstado))
+        {
+            throw new DominioException("El estado indicado no es válido.");
+        }
+        Estado = nuevoEstado;
+        FechaUltimaModificacion = DateTime.Now;
+        UsuarioUltimoCambio = idUsuario;
+    }
+    
 }
