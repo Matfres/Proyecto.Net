@@ -1,5 +1,6 @@
 using SGR.Dominio.Comun;
-namespace  SGR.Dominio.Detalle;
+
+namespace SGR.Dominio.Actuaciones;
 
 public  Recod class Detalle {
 private String cuerpo{get;};
