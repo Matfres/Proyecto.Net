@@ -11,17 +11,38 @@ public class Reclamo
     public Guid UsuarioUltimoCambio { get; private set; }
     public EstadoReclamo Estado { get; private set; }
 
-    public Reclamo(Asunto asunto, DateTime fechaCreacion, Guid idUsuario)
+      // Constructor público: crea un reclamo nuevo.
+    public Reclamo(Asunto asunto, DateTime fechaCreacion, Guid idUsuario): this(Guid.NewGuid(), asunto, fechaCreacion, fechaCreacion, idUsuario, EstadoReclamo.Recibido)
     {
+    }
+
+    // Constructor privado: centraliza las validaciones y asignaciones.
+    private Reclamo(Guid id, Asunto asunto, DateTime fechaCreacion, DateTime fechaUltimaModificacion, Guid usuarioUltimoCambio, EstadoReclamo estado)
+    {
+        if (id == Guid.Empty)
+            throw new DominioException("El Id del reclamo no puede ser un Guid vacío.");
+
         if (asunto == null)
             throw new DominioException("El asunto es obligatorio.");
 
-        Id = Guid.NewGuid();
+        if (fechaUltimaModificacion < fechaCreacion)
+            throw new DominioException("La fecha de última modificación no puede ser anterior a la fecha de creación.");
+
+        if (!Enum.IsDefined(typeof(EstadoReclamo), estado))
+            throw new DominioException("El estado indicado no es válido.");
+
+        Id = id;
         Asunto = asunto;
         FechaCreacion = fechaCreacion;
-        FechaUltimaModificacion = fechaCreacion;
-        UsuarioUltimoCambio = idUsuario;
-        Estado = EstadoReclamo.Recibido;
+        FechaUltimaModificacion = fechaUltimaModificacion;
+        UsuarioUltimoCambio = usuarioUltimoCambio;
+        Estado = estado;
+    }
+
+    // Factory Method: reconstruye un reclamo existente.
+    public static Reclamo Reconstruir(Guid id, Asunto asunto, DateTime fechaCreacion, DateTime fechaUltimaModificacion, Guid usuarioUltimoCambio, EstadoReclamo estado)
+    {
+        return new Reclamo(id, asunto, fechaCreacion, fechaUltimaModificacion, usuarioUltimoCambio, estado);
     }
 
     public void ModificarAsunto(Asunto nuevoAsunto, Guid idUsuario)
