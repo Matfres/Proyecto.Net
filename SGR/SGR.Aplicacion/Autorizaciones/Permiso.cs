@@ -1,4 +1,4 @@
-namespace SGR.Aplicacion.Autorizacion;
+namespace SGR.Aplicacion.Autorizaciones;
 
 public enum Permiso
 {
