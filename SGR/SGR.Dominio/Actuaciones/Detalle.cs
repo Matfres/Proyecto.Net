@@ -16,5 +16,5 @@ public Detalle (String c){
     this.cuerpo = c;
 }
 
-
+    public override string ToString() => cuerpo;
 }

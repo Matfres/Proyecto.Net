@@ -1,43 +1,52 @@
-﻿namespace SGR.Aplicacion;
+﻿namespace SGR.Dominio.Actuaciones;
+using SGR.Dominio.Comun;
 
 public class Actuacion{
-    public Guid id {get;private set};
-    public Guid ReclamoId {get;private set};
-    public  TipoActuacion tipo{get;private set};
-    private Detalle detalle {get;private set};
-    private DateTime FechaCreacion {get;private set};
-    private DateTime FechaUltimaModificacion{get;private set};
-    private Guid UsuarioUltimoCambio {get;private set};
+    public Guid id {get;private set;}
+    public Guid ReclamoId {get;private set;}
+    public  TipoActuacion tipo{get;private set;}
+    public Detalle detalle {get;private set;}
+    public DateTime FechaCreacion {get;private set;}
+    public DateTime FechaUltimaModificacion{get;private set;}
+    public Guid UsuarioUltimoCambio {get;private set;}
 
     private Actuacion ( Guid Id, Guid Rid,TipoActuacion Tipo, Detalle Det,DateTime Fc, DateTime Fmod, Guid UsuarioId){
-        if ( Id == Guid.isEmpty){
+        if ( Id == Guid.Empty){
             throw new DominioException( "el Id no puede ser nulo");
         }
-        this.id = Id
-        this.ReclamoId = Rid ?? throw  new DominioException (" La actuacion debe tener un ID de reclamo ");
-        if( !(Enum.IsDefined(typeof(TipoActuacion), Tipo))){
+        this.id = Id;
+        if (Rid == Guid.Empty)
+        {
+            throw  new DominioException (" La actuacion debe tener un ID de reclamo ");
+        }
+        this.ReclamoId = Rid;
+        if( !Enum.IsDefined(typeof(TipoActuacion), Tipo)){
             throw new DominioException("el tipo no se encuentra dentro de los tipos aceptados por una actuacion");
         }
-        this.tipo = Tipo?? throw new DominioException("el tipo no puede ser nulo");
-        this.detalle = Det ?? throw ("el detalle no puede ser nulo");
+        this.tipo = Tipo;
+        this.detalle = Det ?? throw new DominioException("el detalle no puede ser nulo");
         if ( Fc == DateTime.MinValue){
             throw new DominioException("la fecha de creacion tiene que ser inicializada");
         }
         this.FechaCreacion= Fc;
         if (Fmod < Fc){
-            throw DominioException ("la fecha de modificacion no puede ser menor a la fecha de creacion")
+            throw new DominioException ("la fecha de modificacion no puede ser menor a la fecha de creacion");
         }
-        this.FechaUltimaModificacion=Fmod ?? throw new DominioException("la fecha de modificacion no puede ser nulo") ;
-        if (UsuarioId == Guid.isEmpty){
+        if (Fmod == DateTime.MinValue)
+        {
+            throw new DominioException("la fecha de modificacion tiene que ser inicializada");
+        }
+        this.FechaUltimaModificacion=Fmod;
+        if (UsuarioId == Guid.Empty){
             throw new DominioException("El id del usuario que ha realizado la ultima modificacion no puede ser nulo");
         }
-        this.UsuarioUltimoCambio = UsuarioId ?? throw new DominioException ("la modificacion debe corresponder a algun usuario");
+        this.UsuarioUltimoCambio = UsuarioId;
     }
-    public Actuacion(Guid Rid,TipoActuacion Tipo, Detalle Det,DateTime Fc, Guid UsuarioId){
-        Fmod=Fc;
-        return this(Guid.NewGuid, Rid,Tipo, Det,Fc,Fmod,UsuarioId);
+    public Actuacion(Guid Rid,TipoActuacion Tipo, Detalle Det,DateTime Fc, Guid UsuarioId) :  this(Guid.NewGuid(), Rid,Tipo, Det,Fc,Fc,UsuarioId)
+    {
+
     }
-    public static Actuacion Reconstruir (Guid Id,Guid Rid,TipoActuacion Tipo, Detalle Det,DateTime Fc,DateTime Fmod, Guis UsuarioId){
+    public static Actuacion Reconstruir (Guid Id,Guid Rid,TipoActuacion Tipo, Detalle Det,DateTime Fc,DateTime Fmod, Guid UsuarioId){
          return new Actuacion (Id,Rid,Tipo,Det,Fc,Fmod,UsuarioId);
 
     }
@@ -55,7 +64,7 @@ public class Actuacion{
     {
         if (!Enum.IsDefined(typeof(TipoActuacion), nuevoTipo))
         {
-            throw new DominioException("El tipon de actuacion indicado no es válido.");
+            throw new DominioException("El tipo de actuacion indicado no es válido.");
         }
         tipo = nuevoTipo;
         FechaUltimaModificacion = DateTime.Now;
