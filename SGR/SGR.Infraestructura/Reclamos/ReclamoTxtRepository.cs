@@ -4,7 +4,7 @@ using System.Text;
 using SGR.Aplicacion.Reclamos;
 using SGR.Dominio.Comun;
 using SGR.Dominio.Reclamos;
-
+using SGR.Infraestructura.Comun;
 namespace SGR.Infraestructura.Reclamos;
 
 public class ReclamoTxtRepository : IReclamoRepository

@@ -1,5 +1,5 @@
 
-namespace SGR.Infraestructura.Reclamos;
+namespace SGR.Infraestructura.Comun;
 
 public class RepositorioException : Exception
 {
