@@ -1,16 +1,18 @@
 
 using SGR.Aplicacion.Autorizaciones;
-
+using SGR.Aplicacion.Actuaciones;
 namespace SGR.Aplicacion.Reclamos;
 
 public class EliminarReclamoUseCase
 {
     private readonly IReclamoRepository _reclamoRepository;
     private readonly IAutorizacionService _autorizacionService;
+    private readonly IActuacionRepository _actuacionRepository;
 
-    public EliminarReclamoUseCase(IReclamoRepository reclamoRepository, IAutorizacionService autorizacionService)
+    public EliminarReclamoUseCase(IReclamoRepository reclamoRepository,  IActuacionRepository actuacionRepository, IAutorizacionService autorizacionService)
     {
         _reclamoRepository = reclamoRepository;
+        _actuacionRepository = actuacionRepository;
         _autorizacionService = autorizacionService;
     }
 
@@ -23,6 +25,13 @@ public class EliminarReclamoUseCase
 
         if (reclamo is null)
             throw new InvalidOperationException($"No se encontró el reclamo con ID {request.Id}.");
+        
+        var actuaciones = _actuacionRepository.ObtenerReclamoId(reclamo.Id).ToList();
+        
+        foreach (var actuacion in actuaciones)
+        {
+            _actuacionRepository.Eliminar(actuacion.id);
+        }
 
         _reclamoRepository.Eliminar(reclamo.Id);
 

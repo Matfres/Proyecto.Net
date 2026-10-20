@@ -31,6 +31,6 @@ public EliminarActuacionUseCase(IActuacionRepository actuacionRepository, IRecla
         }
         _actuacionRepository.Eliminar(request.Id);
         _actualizacionEstadoReclamoService.Ejecutar(actuacion.ReclamoId,request.IdUsuario);
-        return new EliminarActuacionResponse(request.IdUsuario);
+        return new EliminarActuacionResponse(actuacion.id);
     }
 }
