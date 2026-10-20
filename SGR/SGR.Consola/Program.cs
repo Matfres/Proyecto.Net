@@ -42,11 +42,7 @@ var idReclamoPrueba = idsReclamos[0];
 //  Modificar el asunto del primer reclamo
 Console.WriteLine("\n=== MODIFICAR ASUNTO ===");
 
-var requestModificar = new ModificarAsuntoReclamoRequest(
-    idReclamoPrueba,
-    "Bache en la avenida principal",
-    idUsuario
-);
+var requestModificar = new ModificarAsuntoReclamoRequest(idReclamoPrueba, "Bache en la avenida principal", idUsuario);
 
 modificarAsunto.Ejecutar(requestModificar);
 
@@ -54,18 +50,13 @@ Console.WriteLine("Asunto modificado correctamente.");
 
 // Cambiamos el estado del primer reclamo
 Console.WriteLine("\n=== CAMBIAR ESTADO ===");
-
-var requestCambiarEstado = new CambiarEstadoReclamoRequest(
-    idReclamoPrueba,
-    EstadoReclamo.EnInspeccion,
-    idUsuario
-);
+var requestCambiarEstado = new CambiarEstadoReclamoRequest(idReclamoPrueba, EstadoReclamo.EnInspeccion, idUsuario);
 
 cambiarEstado.Ejecutar(requestCambiarEstado);
 
 Console.WriteLine("Estado modificado correctamente.");
 
-// 6. Obtener el primer reclamo y verificar las modificaciones.
+// Obtener el primer reclamo y verificar las modificaciones
 Console.WriteLine("\n=== VERIFICAR MODIFICACIONES ===");
 
 var requestObtener = new ObtenerReclamoPorIdRequest(idReclamoPrueba);
@@ -75,7 +66,7 @@ Console.WriteLine($"ID: {responseObtener.Reclamo.Id}");
 Console.WriteLine($"Asunto: {responseObtener.Reclamo.Asunto}");
 Console.WriteLine($"Estado: {responseObtener.Reclamo.Estado}");
 
-// 7. Listar todos los reclamos.
+// Listar todos los reclamos
 Console.WriteLine("\n=== LISTADO ANTES DE LA BAJA ===");
 
 var responseListado = listarReclamos.Ejecutar(new ListarReclamosRequest());
