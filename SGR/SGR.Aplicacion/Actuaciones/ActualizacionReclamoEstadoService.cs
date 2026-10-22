@@ -24,8 +24,7 @@ public class ActualizacionEstadoReclamoService : IActualizacionEstadoReclamoServ
 
         // 2. Buscar las actuaciones asociadas para determinar la última por fecha
         var actuaciones = _actuacionRepository.ObtenerReclamoId(reclamoId);
-        var ultimaActuacion = actuaciones.MaxBy (a => a.FechaCreacion);
-
+        var ultimaActuacion = actuaciones.Where(a => a.tipo != TipoActuacion.Observacion && a.tipo != TipoActuacion.RespuestaAlVecino).MaxBy(a => a.FechaCreacion);
         // 3. Extraer el tipo (null si no tiene actuaciones)
         TipoActuacion? ultimoTipo = ultimaActuacion?.tipo;
 

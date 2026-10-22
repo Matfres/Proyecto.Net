@@ -1,3 +1,3 @@
 namespace SGR.Aplicacion.Actuaciones;
 
-public record class AgregarActuacionResponse (Guid IdUsuario);
+public record class AgregarActuacionResponse (Guid Id);

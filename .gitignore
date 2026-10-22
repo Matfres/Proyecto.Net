@@ -5,6 +5,7 @@
 
 # dotenv files
 .env
+Datos/
 
 # User-specific files
 *.rsuser

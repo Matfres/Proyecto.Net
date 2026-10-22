@@ -24,8 +24,8 @@ public ActuacionesTxtRepository (string ruta)
             actuacion.id,
             actuacion.ReclamoId,
             detalleCodificado,
-            actuacion.FechaCreacion.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-            actuacion.FechaUltimaModificacion.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+            actuacion.FechaCreacion.ToString("O", CultureInfo.InvariantCulture),
+            actuacion.FechaUltimaModificacion.ToString("O", CultureInfo.InvariantCulture),
             actuacion.UsuarioUltimoCambio,
             actuacion.tipo);
     }
@@ -43,8 +43,8 @@ public ActuacionesTxtRepository (string ruta)
             var Rid = Guid.Parse(campos[1]);
             var detalleTexto = Encoding.UTF8.GetString(Convert.FromBase64String(campos[2]));
             var detalle = new Detalle(detalleTexto);
-            var fechaCreacion = DateTime.ParseExact(campos[3], "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            var fechaUltimaModificacion = DateTime.ParseExact(campos[4], "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            var fechaCreacion = DateTime.ParseExact(campos[3], "O", CultureInfo.InvariantCulture);
+            var fechaUltimaModificacion = DateTime.ParseExact(campos[4], "O", CultureInfo.InvariantCulture);
             var usuarioUltimoCambio = Guid.Parse(campos[5]);
             var tipo = Enum.Parse<TipoActuacion>(campos[6]);
         //recontruye la actuacion con el metodo estatico de la entidad
