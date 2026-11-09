@@ -143,41 +143,32 @@ try
     agregarActuacion.Ejecutar(new AgregarActuacionRequest("Se deja constancia del trabajo realizado.", idUsuario, TipoActuacion.Observacion, idReclamo));
     MostrarEstado(idReclamo, "Después de Observacion");
 
-    // 6.6. Eliminamos TrabajoRealizado.
-    // Debe recalcularse el estado usando la última actuación
-    // que determina el estado, ignorando la observacion
-    eliminarActuacion.Ejecutar(new EliminarActuacionRequest(idTrabajoRealizado,idUsuario));
-    MostrarEstado(idReclamo, "Después de eliminar TrabajoRealizado");
+    // Guardamos las actuaciones actuales antes de eliminar la última
+    var actuacionesRegistradas = actuacionRepository.ObtenerReclamoId(idReclamo).ToList();
+    var ultimaActuacion = actuacionesRegistradas.LastOrDefault();
 
-    // 6.7. Eliminamos OrdenDeTrabajo.
-    // Debe volver a EnInspeccion.
-    var orden = actuacionRepository.ObtenerReclamoId(idReclamo).FirstOrDefault(a => a.tipo == TipoActuacion.OrdenDeTrabajo);
+    // Definimos las actuaciones esperadas (todas menos la última que vamos a eliminar)
+    var actuacionesEsperadas = actuacionesRegistradas
+        .Where(a => ultimaActuacion is null || a.id != ultimaActuacion.id)
+        .ToList();
 
-    if (orden is not null)
+    // 6.6. Eliminamos únicamente la última actuación (la Observación)
+    if (ultimaActuacion is not null)
     {
-        eliminarActuacion.Ejecutar(new EliminarActuacionRequest(orden.id, idUsuario));
+        eliminarActuacion.Ejecutar(new EliminarActuacionRequest(ultimaActuacion.id, idUsuario));
+        Console.WriteLine($"Se eliminó la última actuación con ID: {ultimaActuacion.id} ({ultimaActuacion.tipo})");
     }
-    MostrarEstado(idReclamo, "Después de eliminar OrdenDeTrabajo");
+    MostrarEstado(idReclamo, "Después de eliminar la última actuación");
 
-    // 6.8. Eliminamos Inspeccion.
-    // Sin actuaciones que determinen el estado, vuelve a Recibido.
-    var inspeccion = actuacionRepository.ObtenerReclamoId(idReclamo).FirstOrDefault(a => a.tipo == TipoActuacion.Inspeccion);
-
-    if (inspeccion is not null)
-    {
-        eliminarActuacion.Ejecutar(new EliminarActuacionRequest(inspeccion.id, idUsuario));
-    }
-
-    MostrarEstado(idReclamo, "Sin actuaciones que determinen el estado");
-    // 6.9. Modificamos el asunto
+    // 6.7. Modificamos el asunto
     modificarAsunto.Ejecutar(new ModificarAsuntoReclamoRequest(idReclamo, "Luminaria reparada en la vía pública", idUsuario));
     Console.WriteLine("Asunto del reclamo modificado.");
 
-    // 6.10. Cambiamos manualmente el estado
+    // 6.8. Cambiamos manualmente el estado
     cambiarEstado.Ejecutar(new CambiarEstadoReclamoRequest(idReclamo, EstadoReclamo.EnInspeccion, idUsuario));
     MostrarEstado(idReclamo, "Después del cambio manual");
 
-    // 6.11. Listamos los reclamos
+    // 6.9. Listamos los reclamos
     Console.WriteLine();
     Console.WriteLine("--- Reclamos registrados ---");
     var responseReclamos = listarReclamos.Ejecutar(new ListarReclamosRequest());
@@ -186,17 +177,23 @@ try
         Console.WriteLine($"ID: {reclamo.Id} | Asunto: {reclamo.Asunto} | Estado: {reclamo.Estado}");
     }
 
-    // 6.12. Listamos las actuaciones restantes
+   // 6.10. Listamos Actuaciones Esperadas y Actuaciones Devueltas
     Console.WriteLine();
-    Console.WriteLine("--- Actuaciones del reclamo ---");
+    Console.WriteLine("--- Actuaciones Esperadas ---");
+    foreach (var act in actuacionesEsperadas)
+    {
+        Console.WriteLine($"ID: {act.id} | Tipo: {act.tipo} | Detalle: {act.detalle}");
+    }
 
+    Console.WriteLine();
+    Console.WriteLine("--- Actuaciones Devueltas ---");
     var responseActuaciones = listarActuaciones.Ejecutar(new ListarActuacionPorReclamoRequest(idReclamo, idUsuario));
     foreach (var actuacion in responseActuaciones.actuaciones)
     {
         Console.WriteLine($"ID: {actuacion.Id} | Tipo: {actuacion.Tipo} | Detalle: {actuacion.Detalle}");
     }
 
-    // 6.13. Probamos la eliminación en cascada.
+    // 6.11. Probamos la eliminación en cascada.
     // Agregamos una actuación para comprobar que también se elimine.
     agregarActuacion.Ejecutar(new AgregarActuacionRequest("Actuación de prueba para eliminación en cascada.", idUsuario, TipoActuacion.Observacion, idReclamo));
     eliminarReclamo.Ejecutar(new EliminarReclamoRequest(idReclamo, idUsuario));
