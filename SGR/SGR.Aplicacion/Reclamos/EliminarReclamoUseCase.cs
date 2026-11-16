@@ -1,6 +1,7 @@
 
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Aplicacion.Actuaciones;
+using SGR.Aplicacion.Comun;
 namespace SGR.Aplicacion.Reclamos;
 
 public class EliminarReclamoUseCase
@@ -24,7 +25,7 @@ public class EliminarReclamoUseCase
         var reclamo = _reclamoRepository.ObtenerPorId(request.Id);
 
         if (reclamo is null)
-            throw new InvalidOperationException($"No se encontró el reclamo con ID {request.Id}.");
+            throw new EntidadNoEncontradaException($"No se encontró el reclamo con ID {request.Id}.");
         
         var actuaciones = _actuacionRepository.ObtenerReclamoId(reclamo.Id).ToList();
         

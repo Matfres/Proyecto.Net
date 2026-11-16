@@ -3,6 +3,7 @@ namespace SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Reclamos;
 using SGR.Dominio.Comun;
 using SGR.Dominio.Actuaciones;
+using SGR.Aplicacion.Comun;
 public class ActualizacionEstadoReclamoService : IActualizacionEstadoReclamoService{
     private readonly IReclamoRepository _reclamoRepository;
     private readonly IActuacionRepository _actuacionRepository;
@@ -19,12 +20,12 @@ public class ActualizacionEstadoReclamoService : IActualizacionEstadoReclamoServ
         var reclamo = _reclamoRepository.ObtenerPorId(reclamoId);
         if (reclamo == null)
         {
-            throw new InvalidOperationException("El reclamo especificado no existe.");
+            throw new EntidadNoEncontradaException("El reclamo especificado no existe.");
         }
 
         // 2. Buscar las actuaciones asociadas para determinar la última por fecha
         var actuaciones = _actuacionRepository.ObtenerReclamoId(reclamoId);
-        var ultimaActuacion = actuaciones.Where(a => a.tipo != TipoActuacion.Observacion && a.tipo != TipoActuacion.RespuestaAlVecino).MaxBy(a => a.FechaCreacion);
+        var ultimaActuacion = actuaciones.MaxBy(a => a.FechaCreacion);
         // 3. Extraer el tipo (null si no tiene actuaciones)
         TipoActuacion? ultimoTipo = ultimaActuacion?.tipo;
 

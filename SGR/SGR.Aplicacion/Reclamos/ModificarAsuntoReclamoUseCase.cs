@@ -1,6 +1,7 @@
 
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Dominio.Reclamos;
+using SGR.Aplicacion.Comun;
 
 namespace SGR.Aplicacion.Reclamos;
 
@@ -23,7 +24,7 @@ public class ModificarAsuntoReclamoUseCase
         var reclamo = _reclamoRepository.ObtenerPorId(request.Id);
 
         if (reclamo is null)
-            throw new InvalidOperationException($"No se encontró el reclamo con ID {request.Id}.");
+            throw new EntidadNoEncontradaException($"No se encontró el reclamo con ID {request.Id}.");
 
         var nuevoAsunto = new Asunto(request.NuevoAsunto);
 

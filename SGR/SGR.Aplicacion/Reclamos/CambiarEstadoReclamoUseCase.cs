@@ -1,6 +1,6 @@
 
 using SGR.Aplicacion.Autorizaciones;
-
+using SGR.Aplicacion.Comun;
 namespace SGR.Aplicacion.Reclamos;
 
 public class CambiarEstadoReclamoUseCase
@@ -22,7 +22,7 @@ public class CambiarEstadoReclamoUseCase
         var reclamo = _reclamoRepository.ObtenerPorId(request.Id);
 
         if (reclamo is null)
-            throw new InvalidOperationException($"No se encontró el reclamo con ID {request.Id}.");
+            throw new EntidadNoEncontradaException($"No se encontró el reclamo con ID {request.Id}.");
 
         reclamo.CambiarEstado(request.NuevoEstado, request.IdUsuario);
 

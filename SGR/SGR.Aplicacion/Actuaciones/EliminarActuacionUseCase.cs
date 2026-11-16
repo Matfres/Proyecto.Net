@@ -2,6 +2,7 @@
 namespace SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Reclamos;
 using SGR.Aplicacion.Autorizaciones; 
+using SGR.Aplicacion.Comun;
 
 public class  EliminarActuacionUseCase{
 
@@ -27,7 +28,7 @@ public EliminarActuacionUseCase(IActuacionRepository actuacionRepository, IRecla
         var actuacion = _actuacionRepository.ObtenerPorId(request.Id);
         if ( actuacion == null)
         {
-            throw new InvalidOperationException($"No se encontró el actuacion con ID {request.Id}.");
+            throw new EntidadNoEncontradaException($"No se encontró el actuacion con ID {request.Id}.");
         }
         _actuacionRepository.Eliminar(request.Id);
         _actualizacionEstadoReclamoService.Ejecutar(actuacion.ReclamoId,request.IdUsuario);

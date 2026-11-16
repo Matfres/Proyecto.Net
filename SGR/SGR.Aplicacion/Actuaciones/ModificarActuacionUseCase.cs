@@ -1,6 +1,8 @@
 namespace SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Aplicacion.Reclamos;
+using SGR.Aplicacion.Comun;
+using SGR.Dominio.Actuaciones;
 
 public class ModificarActuacionUseCase
 {
@@ -25,9 +27,9 @@ public class ModificarActuacionUseCase
         var actuacion= _actuacionRepository.ObtenerPorId(request.id);
         if (actuacion == null)
         {
-            throw new InvalidOperationException("no se encontro ninguna actuacion con ese ID");
+            throw new EntidadNoEncontradaException("no se encontro ninguna actuacion con ese ID");
         }
-        actuacion.ModificarDetalle(request.detalle,request.idUsuario);
+        actuacion.ModificarDetalle(new Detalle(request.detalle),request.idUsuario);
         actuacion.CambiarTipo(request.tipo,request.idUsuario);
         _actuacionRepository.Modificar(actuacion);
         _actualizacionEstadoReclamoService.Ejecutar(actuacion.ReclamoId,request.idUsuario);

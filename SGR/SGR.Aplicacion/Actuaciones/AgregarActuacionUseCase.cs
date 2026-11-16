@@ -2,6 +2,7 @@ using SGR.Aplicacion.Autorizaciones;
 using SGR.Dominio.Actuaciones;
 using SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Reclamos;
+using SGR.Aplicacion.Comun;
 namespace SGR.Aplicacion.Actuaciones;
 
 public class AgregarActuacionUseCase
@@ -27,7 +28,7 @@ public class AgregarActuacionUseCase
     }
     if (_reclamoRepository.ObtenerPorId(request.Rid) == null)
         {
-            throw new InvalidOperationException($"No se encontró el reclamo con ID {request.Rid}.");
+            throw new EntidadNoEncontradaException($"No se encontró el reclamo con ID {request.Rid}.");
         }
         var detalle = new Detalle (request.detalle);
         var actuacion = new Actuacion(request.Rid,request.tipo,detalle,DateTime.Now, request.idUsuario);
