@@ -51,6 +51,7 @@ public class Reclamo
         {
             throw new DominioException("El asunto es obligatorio.");
         }
+        ValidarIdUsuario(idUsuario);
         Asunto = nuevoAsunto;
         FechaUltimaModificacion = DateTime.Now;
         UsuarioUltimoCambio = idUsuario;
@@ -62,6 +63,7 @@ public class Reclamo
         {
             throw new DominioException("El estado indicado no es válido.");
         }
+        ValidarIdUsuario(idUsuario);
         Estado = nuevoEstado;
         FechaUltimaModificacion = DateTime.Now;
         UsuarioUltimoCambio = idUsuario;
@@ -70,7 +72,8 @@ public class Reclamo
     public bool ActualizarEstado(TipoActuacion? ultimoTipo, Guid idUsuario)
     {
         EstadoReclamo? nuevoEstado;
-
+        ValidarIdUsuario(idUsuario);
+        
         if (ultimoTipo == null)
         {
             nuevoEstado = EstadoReclamo.Recibido;
@@ -104,6 +107,11 @@ public class Reclamo
         UsuarioUltimoCambio = idUsuario;
 
         return true;
+    }
+    private static void ValidarIdUsuario(Guid idUsuario)
+    {
+        if (idUsuario == Guid.Empty)
+            throw new DominioException("El Id del usuario no puede ser un Guid vacío.");
     }
     
 }
