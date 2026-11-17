@@ -2,6 +2,7 @@ namespace SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Aplicacion.Reclamos;
 using SGR.Aplicacion.Comun;
+using SGR.Dominio.Usuarios;
 using SGR.Dominio.Actuaciones;
 
 public class ModificarActuacionUseCase

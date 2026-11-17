@@ -3,6 +3,7 @@ using SGR.Dominio.Actuaciones;
 using SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Reclamos;
 using SGR.Aplicacion.Comun;
+using SGR.Dominio.Usuarios;
 namespace SGR.Aplicacion.Actuaciones;
 
 public class AgregarActuacionUseCase

@@ -2,6 +2,7 @@
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Dominio.Reclamos;
 using SGR.Aplicacion.Comun;
+using SGR.Dominio.Usuarios;
 
 namespace SGR.Aplicacion.Reclamos;
 

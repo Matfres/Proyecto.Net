@@ -1,3 +1,4 @@
+using SGR.Dominio.Usuarios;
 namespace SGR.Aplicacion.Autorizaciones;
 
 public interface IAutorizacionService{

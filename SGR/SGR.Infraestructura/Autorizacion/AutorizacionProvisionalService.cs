@@ -1,5 +1,5 @@
 using SGR.Aplicacion.Autorizaciones;
-
+using SGR.Dominio.Usuarios;
 namespace SGR.Infraestructura.Autorizacion;
 
 public class AutorizacionProvisionalService : IAutorizacionService
