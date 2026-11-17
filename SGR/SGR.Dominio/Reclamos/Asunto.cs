@@ -1,10 +1,11 @@
+
 using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Reclamos;
 
 public record class Asunto
 {
-    public string Valor { get; }
+    public string Valor { get; private set; }
 
     public Asunto(string valor)
     {
