@@ -5,7 +5,7 @@ using SGR.Dominio.Actuaciones;
 using SGR.Dominio.Reclamos;
 using SGR.Dominio.Usuarios;
 
-namespace SGR.Infraestructura.Datos;
+namespace SGR.Infraestructura.Configuracion;
 
 public class SgrContext : DbContext
 {
