@@ -17,5 +17,9 @@ public record class Detalle
         Cuerpo = cuerpo;
     }
 
+    protected Detalle()
+    {
+    }
+
     public override string ToString() => Cuerpo;
 }

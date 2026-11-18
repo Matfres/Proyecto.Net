@@ -2,9 +2,10 @@
 using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Usuarios;
+
 public record class CorreoElectronico
 {
-    public string Valor { get; }
+    public string Valor { get; private set; } = "";
 
     public CorreoElectronico(string valor)
     {
@@ -24,6 +25,10 @@ public record class CorreoElectronico
             throw new DominioException("El correo electrónico no tiene un formato válido.");
 
         Valor = valor;
+    }
+
+    protected CorreoElectronico()
+    {
     }
 
     public override string ToString() => Valor;

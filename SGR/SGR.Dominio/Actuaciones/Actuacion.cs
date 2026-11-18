@@ -19,10 +19,10 @@ public class Actuacion
         if (reclamoId == Guid.Empty)
             throw new DominioException("La actuación debe tener un ID de reclamo.");
 
-        if (!Enum.IsDefined(typeof(TipoActuacion), tipo))
+        if (!Enum.IsDefined(typeof(TipoActuacion), unTipo))
             throw new DominioException("El tipo no se encuentra dentro de los tipos aceptados por una actuación.");
 
-        if (detalle == null)
+        if (unDetalle == null)
             throw new DominioException("El detalle no puede ser nulo.");
 
         if (fechaCreacion == DateTime.MinValue)

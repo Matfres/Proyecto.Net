@@ -17,6 +17,9 @@ public class Reclamo
     {
         if (asunto == null)
             throw new DominioException("El asunto es obligatorio.");
+        
+        if (fechaCreacion == DateTime.MinValue)
+            throw new DominioException("La fecha de creación tiene que ser inicializada.");
 
         ValidarIdUsuario(idUsuario);
 
