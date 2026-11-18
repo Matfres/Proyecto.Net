@@ -1,20 +1,21 @@
+
 using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Actuaciones;
 
-public  record class Detalle {
-private String cuerpo{get;}
+public record class Detalle
+{
+    public string Cuerpo { get; private set; } = "";
 
-public Detalle (String c){
-    if (String.IsNullOrWhiteSpace(c)){
-         throw new DominioException ("El cuerpo del detalle no puede estar vacio");
-    }
-    c.Trim();
-    if (c.Length == 0 ){
-        throw new DominioException("El cuerpo del detalle no puede estar constituido solo por espacios");
-    }
-    this.cuerpo = c;
-}
+    public Detalle(string cuerpo)
+    {
+        if (string.IsNullOrWhiteSpace(cuerpo))
+            throw new DominioException("El cuerpo del detalle no puede estar vacío.");
 
-    public override string ToString() => cuerpo;
+        cuerpo = cuerpo.Trim();
+
+        Cuerpo = cuerpo;
+    }
+
+    public override string ToString() => Cuerpo;
 }
