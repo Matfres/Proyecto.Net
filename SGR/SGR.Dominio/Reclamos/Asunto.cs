@@ -5,7 +5,7 @@ namespace SGR.Dominio.Reclamos;
 
 public record class Asunto 
 {
-    public string Valor { get; private set; }
+    public string Valor { get; private set; }= "";
 
     public Asunto(string valor)
     {
@@ -18,6 +18,9 @@ public record class Asunto
             throw new DominioException("El asunto no puede superar los 200 caracteres.");
 
         Valor = valor;
+    }
+    protected Asunto()
+    {
     }
 
     public override string ToString() => Valor;

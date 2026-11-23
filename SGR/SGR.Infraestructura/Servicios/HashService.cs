@@ -1,4 +1,5 @@
 using SGR.Aplicacion;
+using SGR.Aplicacion.Abstracciones;
 using System.Security.Cryptography;
 using System.Text;
 namespace SGR.Infraestructura;
