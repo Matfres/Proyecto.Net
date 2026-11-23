@@ -1,4 +1,5 @@
 using SGR.Aplicacion.Abstracciones;
+using SGR.Aplicacion.Comun;
 using SGR.Aplicacion.DTO;
 using SGR.Dominio.Comun;
 using SGR.Dominio.Usuarios;
@@ -19,7 +20,7 @@ public class RegistrarUsuarioUseCase(
         var usuarioExistente = _usuarioRepository.ObtenerPorEmail(correo);
         if (usuarioExistente != null)
         {
-            throw new DominioException("Ya existe un usuario registrado con ese correo electrónico.");
+            throw new CorreoElectronicoDuplicadoException("Ya existe un usuario registrado con ese correo electrónico.");
         }
 
         // 3. Validar regla de longitud mínima de contraseña (al menos 8 caracteres)
