@@ -2,17 +2,19 @@
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Dominio.Reclamos;
 using SGR.Dominio.Usuarios;
-
+using SGR.Aplicacion.Abstracciones;
+using SGR.Aplicacion.DTO;
 namespace SGR.Aplicacion.Reclamos;
 
 public class AgregarReclamoUseCase
 {
     private readonly IReclamoRepository _reclamoRepository;
     private readonly IAutorizacionService _autorizacionService;
-
-    public AgregarReclamoUseCase(IReclamoRepository reclamoRepository, IAutorizacionService autorizacionService)
+    private readonly IUnidadDeTrabajo _uow;
+    public AgregarReclamoUseCase(IReclamoRepository reclamoRepository, IAutorizacionService autorizacionService, IUnidadDeTrabajo uow)
     {
         _reclamoRepository = reclamoRepository;
+        _uow= uow;
         _autorizacionService = autorizacionService;
     }
 
@@ -25,6 +27,7 @@ public class AgregarReclamoUseCase
         var reclamo = new Reclamo(asunto, DateTime.Now, request.IdUsuario);
 
         _reclamoRepository.Agregar(reclamo);
+        _uow.GuardarCambios();
 
         return new AgregarReclamoResponse(reclamo.Id);
     }

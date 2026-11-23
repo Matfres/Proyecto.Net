@@ -3,11 +3,9 @@ using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Usuarios;
 
-public class Usuario
+public class Usuario : Entidad
 {
     private List<Permiso> _permisos = [];
-
-    public Guid Id { get; private set; }
     public string Nombre { get; private set; } = "";
     public CorreoElectronico CorreoElectronico { get; private set; } = null!;
     public string ContrasenaHash { get; private set; } = "";
@@ -26,7 +24,6 @@ public class Usuario
         if (string.IsNullOrWhiteSpace(contrasenaHash))
             throw new DominioException("La contraseña cifrada del usuario es obligatoria.");
 
-        Id = Guid.NewGuid();
         Nombre = nombre;
         CorreoElectronico = correoElectronico;
         ContrasenaHash = contrasenaHash;
@@ -73,7 +70,13 @@ public class Usuario
         if (!Enum.IsDefined(typeof(Permiso), permiso))
             throw new DominioException("El permiso indicado no es válido.");
 
-        return _permisos.Contains(permiso);
+    if ( _permisos.Contains(permiso)){
+        return true;
+    }
+    if (permiso == Permiso.ActuacionBaja  && _permisos.Contains (Permiso.ReclamoBaja)){
+        return true;
+    }
+    return false;
     }
 
 

@@ -1,4 +1,5 @@
-
+using SGR.Aplicacion.DTO;
+using SGR.Aplicacion.Abstracciones;
 namespace SGR.Aplicacion.Reclamos;
 
 public class ListarReclamosUseCase
@@ -12,7 +13,9 @@ public class ListarReclamosUseCase
 
     public ListarReclamosResponse Ejecutar(ListarReclamosRequest request)
     {
-        var reclamos = _reclamoRepository.ObtenerTodos();
+        var reclamos = request.estado == null
+        ? _reclamoRepository.ObtenerTodos()
+        : _reclamoRepository.ObtenerPorEstado(request.estado.Value);
 
         var reclamosDTO = reclamos.Select(reclamo => new ReclamoDTO(reclamo.Id, reclamo.Asunto.Valor, reclamo.FechaCreacion, reclamo.FechaUltimaModificacion, reclamo.UsuarioUltimoCambio, reclamo.Estado));
 

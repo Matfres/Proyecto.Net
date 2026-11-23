@@ -1,9 +1,7 @@
 namespace SGR.Aplicacion.Actuaciones;
-
-using SGR.Aplicacion.Reclamos;
 using SGR.Dominio.Comun;
-using SGR.Dominio.Actuaciones;
 using SGR.Aplicacion.Comun;
+using SGR.Aplicacion.Abstracciones;
 public class ActualizacionEstadoReclamoService : IActualizacionEstadoReclamoService{
     private readonly IReclamoRepository _reclamoRepository;
     private readonly IActuacionRepository _actuacionRepository;

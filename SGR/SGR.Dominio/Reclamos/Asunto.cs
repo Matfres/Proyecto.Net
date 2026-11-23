@@ -3,7 +3,7 @@ using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Reclamos;
 
-public record class Asunto
+public record class Asunto 
 {
     public string Valor { get; private set; }
 

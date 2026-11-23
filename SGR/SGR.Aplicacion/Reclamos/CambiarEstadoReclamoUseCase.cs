@@ -2,16 +2,19 @@
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Aplicacion.Comun;
 using SGR.Dominio.Usuarios;
+using SGR.Aplicacion.Abstracciones;
+using SGR.Aplicacion.DTO;
 namespace SGR.Aplicacion.Reclamos;
 
 public class CambiarEstadoReclamoUseCase
 {
     private readonly IReclamoRepository _reclamoRepository;
     private readonly IAutorizacionService _autorizacionService;
-
-    public CambiarEstadoReclamoUseCase(IReclamoRepository reclamoRepository, IAutorizacionService autorizacionService)
+    private readonly IUnidadDeTrabajo _uow;
+    public CambiarEstadoReclamoUseCase(IReclamoRepository reclamoRepository, IAutorizacionService autorizacionService,IUnidadDeTrabajo uow)
     {
         _reclamoRepository = reclamoRepository;
+        _uow=uow;
         _autorizacionService = autorizacionService;
     }
 
@@ -28,6 +31,7 @@ public class CambiarEstadoReclamoUseCase
         reclamo.CambiarEstado(request.NuevoEstado, request.IdUsuario);
 
         _reclamoRepository.Modificar(reclamo);
+        _uow.GuardarCambios();
 
         return new CambiarEstadoReclamoResponse(reclamo.Id);
     }

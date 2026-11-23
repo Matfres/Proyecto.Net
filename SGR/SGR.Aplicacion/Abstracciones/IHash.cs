@@ -1,4 +1,4 @@
-namespace SGR.Aplicacion;
+namespace SGR.Aplicacion.Abstracciones;
 
 public interface IHashService
 {

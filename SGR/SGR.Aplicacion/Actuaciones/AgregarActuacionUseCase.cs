@@ -1,9 +1,9 @@
 using SGR.Aplicacion.Autorizaciones;
 using SGR.Dominio.Actuaciones;
-using SGR.Aplicacion.Actuaciones;
-using SGR.Aplicacion.Reclamos;
 using SGR.Aplicacion.Comun;
 using SGR.Dominio.Usuarios;
+using SGR.Aplicacion.DTO;
+using SGR.Aplicacion.Abstracciones;
 namespace SGR.Aplicacion.Actuaciones;
 
 public class AgregarActuacionUseCase
@@ -11,15 +11,16 @@ public class AgregarActuacionUseCase
     private readonly IActuacionRepository _actuacionRepository;
     private readonly IAutorizacionService _autorizacionService;
     private readonly IReclamoRepository _reclamoRepository;
-
+    private readonly IUnidadDeTrabajo _uow;
     private readonly IActualizacionEstadoReclamoService _actualizacionReclamoEstadoService;
     
-    public AgregarActuacionUseCase(IActuacionRepository actuacionRepository, IAutorizacionService autorizacionService,IReclamoRepository reclamoRepository, IActualizacionEstadoReclamoService actualizacionEstadoReclamoService)
+    public AgregarActuacionUseCase(IActuacionRepository actuacionRepository, IAutorizacionService autorizacionService,IReclamoRepository reclamoRepository, IActualizacionEstadoReclamoService actualizacionEstadoReclamoService, IUnidadDeTrabajo uow)
     {
         _actuacionRepository = actuacionRepository;
         _autorizacionService = autorizacionService;
         _reclamoRepository = reclamoRepository;
         _actualizacionReclamoEstadoService = actualizacionEstadoReclamoService;
+        _uow = uow;
     }
 
     public AgregarActuacionResponse Ejecutar(AgregarActuacionRequest request)
@@ -36,7 +37,8 @@ public class AgregarActuacionUseCase
 
         _actuacionRepository.Agregar(actuacion);
         _actualizacionReclamoEstadoService.Ejecutar(request.Rid, request.idUsuario);
+        _uow.GuardarCambios();
 
-        return new AgregarActuacionResponse(actuacion.id);
+        return new AgregarActuacionResponse(actuacion.Id);
     }
 }

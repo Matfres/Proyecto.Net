@@ -1,21 +1,23 @@
 namespace SGR.Aplicacion.Actuaciones;
 using SGR.Aplicacion.Autorizaciones;
-using SGR.Aplicacion.Reclamos;
 using SGR.Aplicacion.Comun;
 using SGR.Dominio.Usuarios;
 using SGR.Dominio.Actuaciones;
+using SGR.Aplicacion.Abstracciones;
+using SGR.Aplicacion.DTO;
 
 public class ModificarActuacionUseCase
 {
     private readonly IActuacionRepository _actuacionRepository;
     private readonly IAutorizacionService _autorizacionService;
     private readonly IActualizacionEstadoReclamoService _actualizacionEstadoReclamoService;
+    private readonly IUnidadDeTrabajo _uow;
 
-
-    public ModificarActuacionUseCase(IActuacionRepository actuacionRepository, IAutorizacionService autorizacionService, IActualizacionEstadoReclamoService actualizacionEstadoReclamoService)
+    public ModificarActuacionUseCase(IActuacionRepository actuacionRepository, IAutorizacionService autorizacionService, IActualizacionEstadoReclamoService actualizacionEstadoReclamoService,IUnidadDeTrabajo uow)
     {
         _actuacionRepository=actuacionRepository;
         _actualizacionEstadoReclamoService=actualizacionEstadoReclamoService;
+        _uow = uow;
         _autorizacionService=autorizacionService;
     }
 
@@ -34,6 +36,7 @@ public class ModificarActuacionUseCase
         actuacion.CambiarTipo(request.tipo,request.idUsuario);
         _actuacionRepository.Modificar(actuacion);
         _actualizacionEstadoReclamoService.Ejecutar(actuacion.ReclamoId,request.idUsuario);
-        return new ModificarActuacionResponse(actuacion.id);
+        _uow.GuardarCambios();
+        return new ModificarActuacionResponse(actuacion.Id);
     }
 }

@@ -1,4 +1,6 @@
 namespace SGR.Aplicacion.Actuaciones;
+using SGR.Aplicacion.Abstracciones;
+using SGR.Aplicacion.DTO;
 
 public class ListarActuacionPorReclamoUseCase
 {
@@ -11,7 +13,7 @@ public class ListarActuacionPorReclamoUseCase
     public ListarActuacionPorReclamoResponse Ejecutar (ListarActuacionPorReclamoRequest request)
     {
         var actuaciones = _actuacionRepository.ObtenerReclamoId(request.reclamoId);
-        var actuacionesDTO = actuaciones.Select(actuacion => new ActuacionDTO(actuacion.id,
+        var actuacionesDTO = actuaciones.Select(actuacion => new ActuacionDTO(actuacion.Id,
         actuacion.ReclamoId,
         actuacion.detalle.ToString(),
         actuacion.FechaCreacion,

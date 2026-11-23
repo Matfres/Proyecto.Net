@@ -3,9 +3,8 @@ using SGR.Dominio.Comun;
 
 namespace SGR.Dominio.Reclamos;
 
-public class Reclamo
+public class Reclamo : Entidad
 {
-    public Guid Id { get; private set; }
     public Asunto Asunto { get; private set; } = null!;
     public DateTime FechaCreacion { get; private set; }
     public DateTime FechaUltimaModificacion { get; private set; }
@@ -22,8 +21,6 @@ public class Reclamo
             throw new DominioException("La fecha de creación tiene que ser inicializada.");
 
         ValidarIdUsuario(idUsuario);
-
-        Id = Guid.NewGuid();
         Asunto = asunto;
         FechaCreacion = fechaCreacion;
         FechaUltimaModificacion = fechaCreacion;
