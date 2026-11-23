@@ -7,9 +7,7 @@ using SGR.Aplicacion.Autorizaciones;
 using SGR.Aplicacion.Actuaciones;
 using SGR.Infraestructura.Autorizacion;
 using SGR.Infraestructura.Servicios;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using SGR.WebApi.Configuracion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,31 +24,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IActualizacionEstadoReclamoService, ActualizacionEstadoReclamoService>();
-
 // Configurar autenticación JWT
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"];
-var jwtSecretKey = builder.Configuration["Jwt:SecretKey"];
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = jwtIssuer,
-
-            ValidateAudience = true,
-            ValidAudience = jwtAudience,
-
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
-
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey!))
-        };
-    });
+builder.Services.AgregarAutenticacionJwt(builder.Configuration);
 var app = builder.Build();
+
+app.UsarManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
 
