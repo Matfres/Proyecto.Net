@@ -34,7 +34,7 @@ public class ModificarAsuntoReclamoUseCase
 
         reclamo.ModificarAsunto(nuevoAsunto, request.IdUsuario);
 
-        _reclamoRepository.Modificar(reclamo);
+        //_reclamoRepository.Modificar(reclamo); llamar a _reclamoRepository.Modificar(reclamo) es redundante: Aca es Guardar() no GuardadCambios() ya persiste las modificaciones detectadas por EF Core
         _uow.GuardarCambios();
         return new ModificarAsuntoReclamoResponse(reclamo.Id);
     }

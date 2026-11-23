@@ -8,9 +8,9 @@ namespace SGR.Infraestructura.Repositorios;
 public class ReclamoRepository: Repository<Reclamo>, IReclamoRepository{
      public ReclamoRepository(SgrContext context) : base(context) { }
 
- public void Modificar (Reclamo actuacion)
+ public void Modificar (Reclamo unReclamo)
     {
-        _context.Reclamos.Update(actuacion);
+        _context.Reclamos.Update(unReclamo);
     }
     public IEnumerable<Reclamo> ObtenerPorEstado (EstadoReclamo estado)
     {
