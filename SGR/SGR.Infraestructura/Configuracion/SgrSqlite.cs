@@ -14,23 +14,39 @@ public static class SgrSqlite
     public static void Inicializar(SgrContext context)
     {
         // Crear la base de datos si todavía no existe.
-        if (context.Database.EnsureCreated())
+        bool baseCreada = context.Database.EnsureCreated();
+
+        // Obtener la conexión con SQLite.
+        var conexion = context.Database.GetDbConnection();
+
+        // Abrir la conexión.
+        if (conexion.State != ConnectionState.Open)
+            conexion.Open();
+
+        // Configurar el modo de registro de SQLite.
+        if (baseCreada)
         {
-            // Obtener la conexión con SQLite.
-            var conexion = context.Database.GetDbConnection();
-
-            // Abrir la conexión.
-            if (conexion.State != ConnectionState.Open)
-                conexion.Open();
-
-            // Configurar el modo de registro de SQLite.
             using var comando = conexion.CreateCommand();
             comando.CommandText = "PRAGMA journal_mode=DELETE;";
             comando.ExecuteNonQuery();
+        }
 
-            // Cerrar la conexión.
-            conexion.Close();
+        // Crear el índice único para el correo electrónico.
+        using (var comandoIndice = conexion.CreateCommand())
+        {
+            comandoIndice.CommandText = @"
+                CREATE UNIQUE INDEX IF NOT EXISTS IX_Usuarios_CorreoElectronico
+                ON Usuarios (CorreoElectronico_Valor);";
 
+            comandoIndice.ExecuteNonQuery();
+        }
+
+        // Cerrar la conexión.
+        conexion.Close();
+
+        // Cargar datos iniciales solamente si la base de datos es nueva.
+        if (baseCreada)
+        {
             // Crear el servicio para calcular los hashes de las contraseñas.
             var hashService = new HashService();
 
@@ -52,7 +68,6 @@ public static class SgrSqlite
             context.Usuarios.Add(agente);
             context.Usuarios.Add(consultor);
 
-            // Aquí cargaremos los reclamos y las actuaciones.
             // Crear reclamos de prueba.
             var reclamo1 = new Reclamo(new Asunto("Problema con el alumbrado público"), DateTime.Now, agente.Id);
             var reclamo2 = new Reclamo(new Asunto("Pérdida de agua en la vía pública"), DateTime.Now, admin.Id);
@@ -61,13 +76,13 @@ public static class SgrSqlite
             // Agregar los reclamos al contexto.
             context.Reclamos.Add(reclamo1);
             context.Reclamos.Add(reclamo2);
-            context.Reclamos.Add(reclamo3); 
+            context.Reclamos.Add(reclamo3);
 
             // Crear actuaciones de prueba.
-            var actuacion1 = new Actuacion( reclamo1.Id, TipoActuacion.Inspeccion, new Detalle("Se realizó una inspección del alumbrado público."), DateTime.Now, agente.Id);
-            var actuacion2 = new Actuacion( reclamo1.Id, TipoActuacion.OrdenDeTrabajo, new Detalle("Se solicita reparar las luminarias afectadas."), DateTime.Now, agente.Id);
-            var actuacion3 = new Actuacion( reclamo2.Id, TipoActuacion.Observacion, new Detalle("Se recibió el aviso de pérdida de agua."), DateTime.Now, admin.Id);
-            var actuacion4 = new Actuacion( reclamo3.Id, TipoActuacion.TrabajoRealizado, new Detalle("Se retiraron los residuos acumulados."), DateTime.Now, agente.Id);
+            var actuacion1 = new Actuacion(reclamo1.Id, TipoActuacion.Inspeccion, new Detalle("Se realizó una inspección del alumbrado público."), DateTime.Now, agente.Id);
+            var actuacion2 = new Actuacion(reclamo1.Id, TipoActuacion.OrdenDeTrabajo, new Detalle("Se solicita reparar las luminarias afectadas."), DateTime.Now, agente.Id);
+            var actuacion3 = new Actuacion(reclamo2.Id, TipoActuacion.Observacion, new Detalle("Se recibió el aviso de pérdida de agua."), DateTime.Now, admin.Id);
+            var actuacion4 = new Actuacion(reclamo3.Id, TipoActuacion.TrabajoRealizado, new Detalle("Se retiraron los residuos acumulados."), DateTime.Now, agente.Id);
 
             // Actualizar el estado de los reclamos según sus actuaciones.
             reclamo1.ActualizarEstado(TipoActuacion.OrdenDeTrabajo, agente.Id);

@@ -23,13 +23,15 @@ public class SgrContext : DbContext
 
         // Configuración de objetos de valor.
         modelBuilder.Entity<Reclamo>().ComplexProperty(r => r.Asunto);
-        modelBuilder.Entity<Usuario>().ComplexProperty(u => u.CorreoElectronico);
-        modelBuilder.Entity<Actuacion>().ComplexProperty(a => a.detalle);
 
-        // Correo electrónico único.
         modelBuilder.Entity<Usuario>()
-            .HasIndex(u => u.CorreoElectronico.Valor)
-            .IsUnique();
+            .ComplexProperty(u => u.CorreoElectronico, correo =>
+            {
+                correo.Property(c => c.Valor)
+                    .HasColumnName("CorreoElectronico_Valor");
+            });
+
+        modelBuilder.Entity<Actuacion>().ComplexProperty(a => a.detalle);
 
         // Guardar los enumerados por su nombre.
         modelBuilder.Entity<Reclamo>()
