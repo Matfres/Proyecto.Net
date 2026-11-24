@@ -34,7 +34,6 @@ public class ModificarActuacionUseCase
         }
         actuacion.ModificarDetalle(new Detalle(request.detalle),request.idUsuario);
         actuacion.CambiarTipo(request.tipo,request.idUsuario);
-        _actuacionRepository.Modificar(actuacion);
         _actualizacionEstadoReclamoService.Ejecutar(actuacion.ReclamoId,request.idUsuario);
         _uow.GuardarCambios();
         return new ModificarActuacionResponse(actuacion.Id);

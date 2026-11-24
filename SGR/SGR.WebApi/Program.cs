@@ -8,22 +8,16 @@ using SGR.Aplicacion.Actuaciones;
 using SGR.Infraestructura.Autorizacion;
 using SGR.Infraestructura.Servicios;
 using SGR.WebApi.Configuracion;
+using SGR.Aplicacion;
+using SGR.Infraestructura;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar la base de datos
-var connectionString = builder.Configuration.GetConnectionString("SgrDb");
 
-builder.Services.AddDbContext<SgrContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
-builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
-builder.Services.AddScoped<IActuacionRepository, ActuacionRepository>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddInfraestructura(builder.Configuration);
 // Registrar servicios
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
-builder.Services.AddScoped<IHashService, HashService>();
-builder.Services.AddScoped<IActualizacionEstadoReclamoService, ActualizacionEstadoReclamoService>();
+builder.Services.AddAplicacion();
 // Configurar autenticación JWT
 builder.Services.AgregarAutenticacionJwt(builder.Configuration);
 var app = builder.Build();
