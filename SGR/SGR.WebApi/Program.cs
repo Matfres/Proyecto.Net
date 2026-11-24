@@ -18,11 +18,15 @@ var app = builder.Build();
 app.UsarManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapReclamoEndpoints();
+
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SgrContext>();
     SgrSqlite.Inicializar(context);
 }
+
+app.MapReclamoEndpoints();
+app.MapAuthEndpoints();
+app.MapUsuarioEndpoints();
 
 app.Run();
