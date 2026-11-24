@@ -1,15 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using SGR.Infraestructura.Configuracion;
-using SGR.Aplicacion.Abstracciones;
 using SGR.Infraestructura;
-using SGR.Infraestructura.Repositorios;
-using SGR.Aplicacion.Autorizaciones;
-using SGR.Aplicacion.Actuaciones;
-using SGR.Infraestructura.Autorizacion;
-using SGR.Infraestructura.Servicios;
 using SGR.WebApi.Configuracion;
 using SGR.Aplicacion;
-using SGR.Infraestructura;
+using SGR.WebApi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +18,7 @@ var app = builder.Build();
 app.UsarManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapReclamoEndpoints();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SgrContext>();
