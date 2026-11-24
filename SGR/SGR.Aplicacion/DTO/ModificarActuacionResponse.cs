@@ -1,3 +1,3 @@
 namespace SGR.Aplicacion.DTO;
 
-public record class ModificarActuacionResponse(Guid idUsuario); 
+public record class ModificarActuacionResponse(Guid Id); 

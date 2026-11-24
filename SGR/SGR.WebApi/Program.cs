@@ -28,5 +28,6 @@ using (var scope = app.Services.CreateScope())
 app.MapReclamoEndpoints();
 app.MapAuthEndpoints();
 app.MapUsuarioEndpoints();
+app.MapActuacionEndpoints();
 
 app.Run();
