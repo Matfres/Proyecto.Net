@@ -4,6 +4,7 @@ using SGR.WebApi.Configuracion;
 using SGR.Aplicacion;
 using SGR.WebApi.Endpoints;
 using Scalar.AspNetCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,12 @@ builder.Services.AddAplicacion();
 
 // Configurar autenticación JWT.
 builder.Services.AgregarAutenticacionJwt(builder.Configuration);
+
+// Configurar la serialización de los enumerados como texto.
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 
